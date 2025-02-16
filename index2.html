@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript DOM</title>
+    <style>
+        .highlight { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1 id="title">Understanding the DOM</h1>
+    <p class="description">The Document Object Model (DOM) represents the structure of a webpage.</p>
+    <button id="changeText">Change Text</button>
+    <button id="addElement">Add Element</button>
+    <button id="removeElement">Remove Element</button>
+    <ul id="list">
+        <li class="item">Item 1</li>
+        <li class="item">Item 2</li>
+        <li class="item">Item 3</li>
+    </ul>
+    <form id="myForm">
+        <input type="text" id="name" placeholder="Enter Name">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // "use strict" enables strict mode in JavaScript which:
+        // 1. Prevents using undeclared variables
+        // 2. Makes eval() safer
+        // 3. Prevents using reserved keywords as variable names
+        // 4. Throws errors for duplicate parameter names
+        // 5. Makes 'this' undefined in functions (instead of window)
+        // 6. Prevents deleting variables, functions or undeletable properties
+        "use strict";
+
+        // Fetching Elements
+        const title = document.getElementById("title");
+        const description = document.getElementsByClassName("description")[0];
+        const items = document.getElementsByTagName("li");
+        const list = document.querySelector("#list");
+        const firstItem = document.querySelector(".item");
+
+        // DOM Traversal
+        console.log(title.parentNode); // Parent Node
+        console.log(list.childNodes); // Child Nodes
+        console.log(list.firstChild); // First Child
+        console.log(firstItem.nextSibling); // Next Sibling
+
+        // Manipulating DOM Elements
+        document.getElementById("changeText").addEventListener("click", function() {
+            title.innerHTML = "DOM Manipulation in JavaScript";
+            description.textContent = "The text has been changed!";
+        });
+
+        // Creating and Removing Elements
+        document.getElementById("addElement").addEventListener("click", function() {
+            let newItem = document.createElement("li");
+            newItem.textContent = "New Item";
+            list.appendChild(newItem);
+        });
+
+        document.getElementById("removeElement").addEventListener("click", function() {
+            if (list.lastChild) {
+                list.removeChild(list.lastChild);
+            }
+        });
+
+        // Event Handling - Bubbling and Capturing
+        list.addEventListener("click", function(event) {
+            if (event.target.tagName === "LI") {
+                event.target.classList.toggle("highlight");
+            }
+        }, true); // Using capturing phase
+
+        // Scroll Events, Mouse Events, Key Events
+        window.addEventListener("scroll", function() {
+            console.log("Page Scrolled");
+        });
+
+        document.addEventListener("keydown", function(event) {
+            console.log("Key Pressed: ", event.key);
+        });
+
+        document.addEventListener("mousemove", function(event) {
+            // console.log("Mouse moved at: ", event.clientX, event.clientY);
+            console.log("moved successfully.")
+        });
+
+        // Working with Forms
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+            const nameInput = document.getElementById("name").value;
+            if (nameInput.trim() === "") {
+                alert("Name field cannot be empty");
+            } else {
+                alert("Form Submitted: " + nameInput);
+            }
+        });
+
+        document.getElementById("name").addEventListener("change", function(event) {
+            console.log("Input changed: ", event.target.value);
+        });
+
+        // ClassList Methods - Adding, Removing, Toggling
+        title.addEventListener("click", function() {
+            title.classList.toggle("highlight");
+        });
+
+        // Browser Events
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM Fully Loaded");
+        });
+
+        window.addEventListener("load", function() {
+            console.log("Page Fully Loaded");
+        });
+
+        window.addEventListener("resize", function() {
+            console.log("Window Resized");
+        });
+    </script>
+</body>
+</html>
