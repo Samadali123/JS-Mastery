@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Event Handling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+        #scrollBox {
+            width: 100px;
+            height: 100px;
+            overflow-y: scroll;
+            border: 1px solid black;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            margin: 10px;
+            display: inline-block;
+            text-align: center;
+            line-height: 100px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="title">Event Handling in JavaScript</h1>
+    <button id="changeColor">Change Title Color</button>
+    
+    <div id="parent">
+        <button id="child">Click Me (Event Bubbling & Capturing)</button>
+    </div>
+
+    <h2>Mouse & Key Events</h2>
+    <p id="mouseMove">Move your mouse here!</p>
+    <input type="text" id="keyInput" placeholder="Type something...">
+
+    <h2>Scroll Event</h2>
+    <div id="scrollBox">
+        <p>Scroll inside this box to trigger an event.</p>
+        <p>More content...</p>
+        <p>More content...</p>
+        <p>More content...</p>
+    </div>
+
+    <h2>Form Handling</h2>
+    <form id="userForm">
+        <input type="text" id="username" placeholder="Enter your name">
+        <button type="submit">Submit</button>
+    </form>
+    <p id="formResult" class="hidden"></p>
+
+    <h2>Class Manipulation</h2>
+    <button id="toggleHighlight">Toggle Highlight</button>
+    <p id="highlightText">Click the button above to highlight this text.</p>
+
+    <h2>Browser Events</h2>
+    <p>Resize the window or reload the page to see console logs.</p>
+
+    <script>
+        "use strict";
+
+        // Event Handling: addEventListener, event.target, bubbling & capturing
+        document.getElementById("changeColor").addEventListener("click", function() {
+            document.getElementById("title").style.color = "blue";
+        });
+
+        // This code adds a click event listener to the element with ID "parent"
+        // The 'false' parameter (or no parameter) means it uses event bubbling
+        // Event bubbling means events on child elements "bubble up" to parent elements
+        // So clicking the child button triggers child's event, then parent's event
+        // Unless stopPropagation() is called (as done in the child event handler)
+        document.getElementById("parent").addEventListener("click", function() {
+            alert("Parent Clicked (Bubbling)");
+        }, false); // Using bubbling phase (events bubble up from child to parent)
+
+        document.getElementById("child").addEventListener("click", function(event) {
+            alert("Child Clicked");
+            event.stopPropagation(); // Prevents bubbling to parent
+        });
+
+        document.getElementById("parent").addEventListener("click", function() {
+            alert("Parent Clicked (Capturing)");
+        }, true); // Capturing Phase
+
+        // Mouse and Key Events
+        document.getElementById("mouseMove").addEventListener("mousemove", function(event) {
+            this.textContent = `Mouse at X: ${event.clientX}, Y: ${event.clientY}`;
+        });
+
+        document.getElementById("keyInput").addEventListener("keydown", function(event) {
+            console.log("Key Pressed: ", event.key);
+        });
+
+        // Scroll Event
+        document.getElementById("scrollBox").addEventListener("scroll", function() {
+            console.log("Scrolled inside the box!");
+        });
+
+        // Form Handling: Accessing Data, Validation, preventDefault, onsubmit, onchange
+        document.getElementById("userForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value.trim();
+            if (username === "") {
+                alert("Please enter your name.");
+            } else {
+                document.getElementById("formResult").textContent = "Form Submitted: " + username;
+                document.getElementById("formResult").classList.remove("hidden");
+            }
+        });
+
+        document.getElementById("username").addEventListener("change", function(event) {
+            console.log("Input changed: ", event.target.value);
+        });
+
+        // Class Manipulation: Adding, Removing, Toggling (classList)
+        document.getElementById("toggleHighlight").addEventListener("click", function() {
+            document.getElementById("highlightText").classList.toggle("highlight");
+        });
+
+        // Browser Events: DOMContentLoaded, load, resize, scroll
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM Fully Loaded and Parsed");
+        });
+
+        window.addEventListener("load", function() {
+            console.log("Page Fully Loaded");
+        });
+
+        window.addEventListener("resize", function() {
+            console.log("Window Resized - New Width: ", window.innerWidth);
+        });
+
+        window.addEventListener("scroll", function() {
+            console.log("Window Scrolled");
+        });
+
+    </script>
+
+</body>
+</html>
