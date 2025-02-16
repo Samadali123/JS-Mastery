@@ -1,0 +1,1 @@
+alert("connected js successfully wo web page")
